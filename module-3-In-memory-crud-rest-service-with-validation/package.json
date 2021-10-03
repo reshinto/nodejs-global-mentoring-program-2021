@@ -1,0 +1,30 @@
+{
+  "name": "module-3-in-memory-crud-rest-service-with-validation",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "task4": "nodemon src/task2.1_and_task2.2/index.ts",
+    "task5": "nodemon src/task2.1_and_task2.2/index.ts",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "test": "npx newman run postman/module-3-homework-2.postman_collection.json --delay-request 500"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.10.1",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.12",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "joi": "^17.4.2",
+    "uuid": "^8.3.2"
+  }
+}
