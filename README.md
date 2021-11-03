@@ -80,3 +80,34 @@
 3. Run test on the other terminal
 
 > npm run test
+
+## Module 5 Second entity and many to many relationship
+
+### How to install And Run with docker
+
+- This will build a postgres and a module-5-server docker image
+- `cd module-5-Second-entity-and-many-to-many-relationship && ./run.sh`
+
+### How to delete installed docker related files
+
+- This will stop and remove docker containers, and remove docker images
+
+> ./delete.sh
+
+### Open server URL to test
+
+- task 4.1, task 4.2, and task 4.3 are combined.
+
+> http://0.0.0.0:3000/
+
+### How to test with postman
+
+1. Open an additional terminal with the same file path
+
+2. Run server on 1 terminal
+
+> ./run.sh
+
+3. Run test on the other terminal
+
+> npm run test
