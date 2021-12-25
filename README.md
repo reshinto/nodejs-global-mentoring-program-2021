@@ -111,3 +111,16 @@
 3. Run test on the other terminal
 
 > npm run test
+
+## Module 6 Logging and error handling
+
+### How to install And Run with docker
+
+- This will build a postgres and a module-5-server docker image
+- `cd module-6-Logging-and-error-handling && ./run.sh`
+
+### How to delete installed docker related files
+
+- This will stop and remove docker containers, and remove docker images
+
+> ./delete.sh
