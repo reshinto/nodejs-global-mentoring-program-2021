@@ -1,0 +1,72 @@
+{
+  "name": "module-8-unit-tests-and-config",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
+    "build": "tsc -b",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage --forceExit --watchAll --maxWorkers=1",
+    "test:postman": "npx newman run postman/module-8-homework-7.postman_collection.json --delay-request 500"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "src/index.ts",
+      "src/config/",
+      "src/loaders/",
+      "src/models/",
+      "node_modules/"
+    ],
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "transform": {
+      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!variables/.*)"
+    ]
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.10.1",
+    "@types/supertest": "^2.0.11",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "eslint": "^7.32.0",
+    "jest": "^27.4.5",
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.1.2",
+    "ts-node": "^10.3.0",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@types/jsonwebtoken": "^8.5.6",
+    "@types/passport": "^1.0.7",
+    "@types/passport-jwt": "^3.0.6",
+    "@types/passport-local": "^1.0.34",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.5.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.7.0",
+    "winston": "^3.3.3"
+  }
+}

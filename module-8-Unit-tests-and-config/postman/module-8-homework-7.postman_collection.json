@@ -1,0 +1,2997 @@
+{
+  "info": {
+    "_postman_id": "1ad761e0-b6b5-482c-b70a-d220fda51363",
+    "name": "module-8-homework-7",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "passed requests",
+      "item": [
+        {
+          "name": "authenticate",
+          "item": [
+            {
+              "name": "login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"token\", jsonData.token);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"Max\",\n    \"password\": \"Password2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/login",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["login"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "users",
+          "item": [
+            {
+              "name": "GET all non-deleted users",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"userId1\", jsonData[0].id);",
+                      "pm.environment.set(\"userId2\", jsonData[1].id);",
+                      "",
+                      "pm.environment.set(\"totalUsers\", jsonData.length);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "POST create new user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"userId\", jsonData[jsonData.length - 1].id);",
+                      "",
+                      "pm.environment.set(\"totalUsers\", jsonData.length);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\",\n    \"age\": 13\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/users/create",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "create"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET suggest users desc",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.test(\"Suggested users should return a list of filtered login filtered by ma text and sorted by descending order\", () => {",
+                      "    pm.expect(jsonData[0].login).to.eql(\"Max\");",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users/search/ma?order=desc",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "search", "ma"],
+                  "query": [
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET suggest users asc",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.test(\"Suggested users should return a list of filtered login filtered by ma text and sorted by ascending order\", () => {",
+                      "    pm.expect(jsonData[0].login).to.eql(\"Mary\");",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users/search/ma",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "search", "ma"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET suggest users limit 1",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.test(\"Suggested users should return a list of filtered login filtered by ma text and limited to 1 result\", () => {",
+                      "    pm.expect(jsonData[0].login).to.eql(\"Mary\");",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users/search/ma?limit=1",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "search", "ma"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET 1 user via ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"login\", jsonData.login);",
+                      "pm.environment.set(\"password\", jsonData.password);",
+                      "pm.environment.set(\"age\", jsonData.age);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users/{{userId}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "{{userId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PUT update 1 user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "const login = pm.environment.get(\"login\");",
+                      "const password = pm.environment.get(\"password\");",
+                      "const age = pm.environment.get(\"age\");",
+                      "",
+                      "pm.test(\"login value has been modified\", () => {",
+                      "    pm.expect(jsonData.login).to.not.eql(login);",
+                      "    pm.expect(jsonData.login).to.eql(\"UpdatedUser1\");",
+                      "});",
+                      "",
+                      "pm.test(\"password value has been modified\", () => {",
+                      "    pm.expect(jsonData.password).to.not.eql(password);",
+                      "    pm.expect(jsonData.password).to.eql(\"UpdatedPassword123456\");",
+                      "});",
+                      "",
+                      "pm.test(\"age value has been modified\", () => {",
+                      "    pm.expect(jsonData.age).to.not.eql(age);",
+                      "    pm.expect(jsonData.age).to.eql(26);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"login\": \"UpdatedUser1\",\n    \"password\": \"UpdatedPassword123456\",\n    \"age\": 26\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/users/{{userId}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "{{userId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DELETE 1 user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "const totalusers = pm.environment.get(\"totalUsers\");",
+                      "",
+                      "pm.test(\"Total number of users have reduced\", () => {",
+                      "    pm.expect(jsonData.length).to.lessThan(totalusers);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users/{{userId}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "{{userId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET 1 deleted user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.test(\"User had been deleted and returns an empty object\", () => {",
+                      "    pm.expect(jsonData).to.eql({});",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/users/{{userId}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users", "{{userId}}"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "groups",
+          "item": [
+            {
+              "name": "GET all groups",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"groupId1\", jsonData[0].id);",
+                      "",
+                      "pm.environment.set(\"totalGroups\", jsonData.length);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/groups",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["groups"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "POST create new group",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"groupId\", jsonData[jsonData.length - 1].id);",
+                      "",
+                      "pm.environment.set(\"totalGroups\", jsonData.length);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"NewGroup1\",\n    \"permissions\": [\"READ\", \"WRITE\", \"DELETE\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/groups/create",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["groups", "create"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET 1 group via ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"name\", jsonData.name);",
+                      "pm.environment.set(\"permissions\", jsonData.permissions);",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/groups/{{groupId}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["groups", "{{groupId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PUT update 1 group",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "const name = pm.environment.get(\"name\");",
+                      "const permissions = pm.environment.get(\"permissions\");",
+                      "",
+                      "pm.test(\"name value has been modified\", () => {",
+                      "    pm.expect(jsonData.name).to.not.eql(name);",
+                      "    pm.expect(jsonData.name).to.eql(\"New Group 2\");",
+                      "});",
+                      "",
+                      "pm.test(\"permissions value has been modified\", () => {",
+                      "    pm.expect(jsonData.permissions).to.not.eql(permissions);",
+                      "    pm.expect(jsonData.permissions).to.eql([",
+                      "        \"READ\",",
+                      "        \"WRITE\",",
+                      "        \"DELETE\",",
+                      "        \"SHARE\"",
+                      "    ]);",
+                      "});",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"New Group 2\",\n    \"permissions\": [\"READ\", \"WRITE\", \"DELETE\", \"SHARE\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/groups/{{groupId}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["groups", "{{groupId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DELETE 1 group",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "const totalGroups = pm.environment.get(\"totalGroups\");",
+                      "",
+                      "pm.test(\"Total number of groups have reduced\", () => {",
+                      "    pm.expect(jsonData.length).to.lessThan(totalGroups);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/groups/{{groupId}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["groups", "{{groupId}}"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "user group",
+          "item": [
+            {
+              "name": "GET user group",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.test(\"0 number of data in user group\", () => {",
+                      "    pm.expect(jsonData.length).to.eql(0);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/usergroup",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["usergroup"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "POST create new group Copy",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.environment.set(\"groupId\", jsonData[jsonData.length - 1].id);",
+                      "",
+                      "pm.environment.set(\"totalGroups\", jsonData.length);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"groupId\": \"{{groupId1}}\",\n    \"userIds\": [\"{{userId1}}\", \"{{userId2}}\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3000/usergroup/addusers",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["usergroup", "addusers"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET user group with data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.test(\"0 number of data in user group\", () => {",
+                      "    pm.expect(jsonData.length).to.eql(2);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/usergroup",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["usergroup"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DELETE group",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "const totalGroups = pm.environment.get(\"totalGroups\");",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/groups/{{groupId1}}",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["groups", "{{groupId1}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET user group with empty data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", () => {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "pm.test(\"0 number of data in user group\", () => {",
+                      "    pm.expect(jsonData.length).to.eql(0);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3000/usergroup",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["usergroup"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "failed requests",
+      "item": [
+        {
+          "name": "user",
+          "item": [
+            {
+              "name": "create new user",
+              "item": [
+                {
+                  "name": "missing login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to missing login field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"login\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"password\": \"Password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "missing password",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to missing password field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "missing age",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to missing age field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login must have aplha-numeric chars",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid login field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"login\\\" must only contain alpha-numeric characters\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"#\",\n    \"password\": \"Password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login must be string",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid login field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"login\\\" must be a string\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": 1,\n    \"password\": \"Password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must have 1 uppercase",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" with value \\\"password123456\\\" fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must have 1 lowercase",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" with value \\\"PASSWORD123456\\\" fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"PASSWORD123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must have 1 number",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" with value \\\"Password\\\" fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must be string",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" must be a string\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": 1,\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "age must be number",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid age field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" must be a number\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\",\n    \"age\": \"t\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "age must be more than 3",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid age field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" must be greater than or equal to 4\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\",\n    \"age\": 3\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "age must be less than 131",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid age field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" must be less than or equal to 130\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\",\n    \"age\": 131\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "create"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "update user",
+              "item": [
+                {
+                  "name": "missing login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to missing login field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"login\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"password\": \"Password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "missing password",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to missing password field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "missing age",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to missing age field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login must have aplha-numeric chars",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid login field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"login\\\" must only contain alpha-numeric characters\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"#\",\n    \"password\": \"Password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login must be string",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid login field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"login\\\" must be a string\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": 1,\n    \"password\": \"Password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must have 1 uppercase",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" with value \\\"password123456\\\" fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"password123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must have 1 lowercase",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" with value \\\"PASSWORD123456\\\" fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"PASSWORD123456\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must have 1 number",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" with value \\\"Password\\\" fails to match the required pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password\",\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "password must be string",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid password field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"password\\\" must be a string\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": 1,\n    \"age\": 13\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "age must be number",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid age field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" must be a number\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\",\n    \"age\": \"t\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "age must be more than 3",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid age field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" must be greater than or equal to 4\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\",\n    \"age\": 3\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "age must be less than 131",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new user should fail due to invalid age field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"age\\\" must be less than or equal to 130\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"login\": \"NewUser1\",\n    \"password\": \"Password123456\",\n    \"age\": 131\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/users/{{userId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["users", "{{userId}}"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "group",
+          "item": [
+            {
+              "name": "create new group",
+              "item": [
+                {
+                  "name": "missing name",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to missing name field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"name\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"permissions\": [\"READ\", \"WRITE\", \"DELETE\"]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "missing permissions",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to missing permissions field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"permissions\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"NewGroup1\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "name must be string",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to invalid name field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"name\\\" must be a string\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": 123,\n    \"permissions\": [\"READ\", \"WRITE\", \"DELETE\"]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "permissions must be an array",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to invalid permissions field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"permissions\\\" must be an array\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"NewGroup1\",\n    \"permissions\": 123\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "create"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "permissions must be an array with valid string value",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to invalid permissions field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"permissions[0]\\\" with value \\\"test\\\" fails to match the required pattern: /^(READ|WRITE|DELETE|SHARE|UPLOAD_FILES)$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"NewGroup1\",\n    \"permissions\": [\"test\"]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/create",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "create"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "update group",
+              "item": [
+                {
+                  "name": "missing name",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to missing name field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"name\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"permissions\": [\"READ\", \"WRITE\", \"DELETE\"]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/{{groupId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "{{groupId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "missing permissions Copy",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to missing permissions field\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"permissions\\\" is required\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"NewGroup1\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/{{groupId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "{{groupId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "name must be string Copy",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to invalid name field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"name\\\" must be a string\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": 123,\n    \"permissions\": [\"READ\", \"WRITE\", \"DELETE\"]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/{{groupId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "{{groupId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "permissions must be an array",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to invalid permissions field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"permissions\\\" must be an array\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"NewGroup1\",\n    \"permissions\": 123\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/{{groupId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "{{groupId}}"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "permissions must be an array with valid string value",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", () => {",
+                          "    pm.response.to.have.status(400);",
+                          "});",
+                          "",
+                          "const jsonData = pm.response.json();",
+                          "",
+                          "pm.test(\"Create new group should fail due to invalid permissions field value\", () => {",
+                          "    pm.expect(jsonData.errors[0].message).to.eql(\"\\\"permissions[0]\\\" with value \\\"test\\\" fails to match the required pattern: /^(READ|WRITE|DELETE|SHARE|UPLOAD_FILES)$/\");",
+                          "});"
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"NewGroup1\",\n    \"permissions\": [\"test\"]\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:3000/groups/{{groupId}}",
+                      "protocol": "http",
+                      "host": ["localhost"],
+                      "port": "3000",
+                      "path": ["groups", "{{groupId}}"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "JWT",
+          "item": [
+            {
+              "name": "JWT malformed",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 403\", () => {",
+                      "    pm.response.to.have.status(403);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "dsf",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "JWT invalid signature",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 403\", () => {",
+                      "    pm.response.to.have.status(403);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1heCIsImlhdCI6MTYzOTE3ODg5MCwiZXhwIjoxNjM5MTgwNjkwfQ.-C-4mfhAiLuo3I9TBUaAwEQ97FQFmTPpwVoDWZd74df",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "JWT no auth token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 401\", () => {",
+                      "    pm.response.to.have.status(401);",
+                      "});",
+                      "",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:3000/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "3000",
+                  "path": ["users"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

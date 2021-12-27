@@ -116,7 +116,7 @@
 
 ### How to install And Run with docker
 
-- This will build a postgres and a module-5-server docker image
+- This will build a postgres and a module-6-server docker image
 - `cd module-6-Logging-and-error-handling && ./run.sh`
 
 ### How to delete installed docker related files
@@ -155,3 +155,40 @@
 3. Run test on the other terminal
 
 > npm run test
+
+## Module 8 Unit tests and config
+
+### How to install And Run with docker
+
+- This will build a postgres and a module-8-server docker image
+- `cd module-8-Unit-tests-and-config && ./run.sh`
+
+### How to delete installed docker related files
+
+- This will stop and remove docker containers, and remove docker images
+
+> ./delete.sh
+
+### Open server URL to test
+
+- task 7.1 and task 7.2 are combined.
+
+> http://0.0.0.0:3000/
+
+### How to test
+
+1. Run normal unit tests
+
+> npm run test:coverage
+
+2. Run postman integration tests
+
+   1. Open an additional terminal with the same file path
+
+   2. Run server on 1 terminal
+
+   > ./run.sh
+
+   3. Run postman test on the other terminal
+
+   > npm run test:postman

@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  db:
+    container_name: module-8-db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: module8
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    ports:
+      - "5432:5432"
+  api:
+    container_name: module-8-server
+    image: module-8-server
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: module8
+      LOG_LEVEL: info
+      TOKEN_SECRET: 09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
