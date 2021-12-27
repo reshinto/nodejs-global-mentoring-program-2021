@@ -124,3 +124,34 @@
 - This will stop and remove docker containers, and remove docker images
 
 > ./delete.sh
+
+## Module 7 JWT authorization and CORS
+
+### How to install And Run with docker
+
+- This will build a postgres and a module-7-server docker image
+- `cd module-7-JWT-authorization-and-CORS && ./run.sh`
+
+### How to delete installed docker related files
+
+- This will stop and remove docker containers, and remove docker images
+
+> ./delete.sh
+
+### Open server URL to test
+
+- task 6.1 and task 6.2 are combined.
+
+> http://0.0.0.0:3000/
+
+### How to test with postman
+
+1. Open an additional terminal with the same file path
+
+2. Run server on 1 terminal
+
+> ./run.sh
+
+3. Run test on the other terminal
+
+> npm run test
